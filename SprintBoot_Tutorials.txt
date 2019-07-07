@@ -1,0 +1,343 @@
+String Boot: Micro Service
+--------------------------
+includes all topics of Spring Boot such as features, project, maven project, starter project wizard, spring Initializr, cli, application, annotations, dm, properties, starters, actuator, jpa, jdbc etc.
+
+
++ An Spring moduel:  RAD (Rapid Application Development) feature to Spring framework.
++ Create stand-alone Spring applications that can be started using java -jar.
++ Embed Tomcat, Jetty or Undertow directly. You don't need to deploy WAR files.
++ It provides opinionated 'starter' POMs to simplify your Maven configuration.
++ It automatically configure Spring whenever possible.
++ It provides production-ready features such as metrics, health checks and externalized configuration.
++ No XML configuration required
++ uses convention over configuration software design paradigm that means it decrease the effort of developer.
+
+
+ ----------------------------------
+| IDE (Spring Tool Suit): Download |
+ ----------------------------------
+ 
+ 
+Web Development:
+----------------
++ use the spring-boot-starter-web module to start and running application quickly.
++ a self-contained HTTP server using embedded Tomcat, Jetty or Undertow.
+
+SpringApplication:
+------------------
+It is a class which provides the convenient way to bootstrap a spring application which can be started from main method. You can call start your application just by calling a static run() method.
+
+public static void main(String[] args){  
+    SpringApplication.run(className.class, args);  
+}
+
+Application Events and Listeners:
+---------------------------------
+Spring Boot uses events to handle variety of tasks. It allows us to create factories file that are used to add listeners. we can refer it by using ApplicationListener key.
+Always create factories file in META-INF folder like: META-INF/spring.factories
+
+Admin Support:
+--------------
+Spring Boot provides the facility to enable admin related features for the application. It is used to access and manage application remotely.
+We can enable it by simply using spring.application.admin.enabled property.
+
+Externalized Configuration:
+---------------------------
+Spring Boot allows us to externalize our configuration so that we can work with the same application in different environments. Application use YAML files to externalize configuration.
+
+Properties Files:
+-----------------
+Spring Boot provides rich set of Application Properties. So, we can use that in properties file of our project. 
+Properties file is used to set properties like: server-port = 8082 and many others. It helps to organize application properties.
+
+YAML Support:
+-------------
+It provides convenient way for specifying hierarchical configuration. It is a superset of JSON. The SpringApplication class automatically support YAML. It is successful alternative of properties.
+
+Type-safe Configuration:
+------------------------
+Strong type-safe configuration is provided to govern and validate the configuration of application. Application configuration is always a crucial task which should be type-safe. 
+We can also use annotation provided by this library.
+
+Logging:
+--------
+Spring Boot uses Common logging for all internal logging. Logging dependencies are managed by default. We should not change logging dependencies, if there is no required customization is needed.
+
+Security:
+---------
+Spring Boot applications are spring bases web applications. So, it is secure by default with basic authentication on all HTTP endpoints. 
+A rich set of Endpoints are available for develop a secure Spring Boot application.
+
+
+
+
+
+
+
+
+
+Spring boot App creation :
+--------------------------
+Open STS
+File->New-> Sprin Started Project
+
+or
+
+open https://start.spring.io
+Create springboot project and download the import in eclipse.
+
+
+
+
+ ----------
+| SBAppOne | = Demo Dependency Injection and autowiring
+ ----------
+	
+	@SpringBootApplication
+	class ABAppOneAppplication
+	{
+		//main method
+			ConfigurableApplicationContext context = SpringApplication.run(SbAppOneApplication.class, args);
+			Employee e= context.getBean(Employee.class);
+			e.show();
+			
+		
+	}
+
+Spring DI:
+----------
+	By default spring bean scope is singleon. 
+	if no scope is mentioned or scope ="singleton" all the beans are created by Spring Container when we start the SpringBoot app.
+	if scope is prototype. no object in created until 1st request is made.
+	
+	// Bean and scope
+	1)
+		@Component 	//Default name employee
+		class Employee
+		{
+			....
+		}
+	2) Spring component scope prototype
+	
+		@Component("someName")
+		@Scope (value ="prototype")
+		class Employee
+		{
+			....
+		}
+	// Autowire and bean name 
+	
+	1) By default spring autowired by type.
+		
+		@Autowired
+		HardDisk dep;
+		
+	2) Spring autowired by name
+		
+		@Autowired
+		@Qualifier("universityDept")
+		HardDisk dep;
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+Spring Web apps:
+---------------
+Open STS
+File->New-> Sprin Started Project-> Starte Web project
+
+create webapp folder under main 
+create home.jsp file under webapp
+
+localhost:8080/home
+	create a controller class
+	@Controller
+	class
+	@RequestMapping("/home")
+	@ResponseBody
+	methodName() return String "home.jsp"
+By default spring boot doest not support jsp. need tomcat jasper dependency in pom.xml 
+we can add application.properties for sufix and prefix properties
+
+SBApp Accept client data:
+------------------------
+localhost:8080/home/ravi
+localhost:8080/home?name=ravi
+
+
+
+
+
+
+
+
+
+ --------------------------
+|SpringBoot JPA MVC H2 App:|
+ --------------------------
+1)
+File->New-> Sprin Started Project-> select Spring Web starter, Spring Data JPA, H2 Database
+	* Web
+	* JPA
+	* H2 is inmemory database.
+Add jsper dependency as we are dealing with jsp pages
+
+2)
+create Alien.java
+create Controller class
+
+main	
+	webapps
+		home.jsp
+		alien.jsp
+		
+3) add these in application.properties
+Enable h2 database
+	spring.h2.console.enabled=true
+	spring.datasource.platform=h2
+	spring.datasource.url=jdbc:h2:mem:rkdb
+
+Check the h2 database in the url
+	localhost:8080/h2-console
+
+4)
+Enable JPS to create tables:
+
+Add @Entiry and @Id annotation in Alien class and acess localhost:8080/h2-console we can see table.
+Insert data from file:
+	create a data.sql file
+		insert into alien values (100,'ravi');
+	When we relaunch SB app we can see data in table.
+5)
+Database access by creating interface AlienRepo extends extends CrudRepository<Alien, Integer>. Here Alien class and Integer type primary key
+No need to declare or implement any methods as implementation is available in SimpleJpaRepository and QuerydslJpaRepository. Just This Autowired AlienRepo in Controller class. 
+
+*) Above has some basic curd operations. If we want to to complex queries? How to DO?
+
+JPA has all predefined methos with primary key ex: findById(-)
+What about if we want to fetch data based of name or tech....? JAP does not have findByName(-) or findByTech(-) methods. then how to fetch by custom query?
+
+findByTech(-) return List<Alien> just declare in AlienRepo no need to implement. enough.! :)
+
+Rules for delareing methods 
+*) findBy_____(-) here Tech, Name .... Property name start with Capital letter. Else error.
+*) findByAidGreaterThan(-) here findByIdGreaterThan(-) wont work.
+*) finxXxxLessThan(-)
+
+If we want to write our own query and own method name then follow example
+
+@Query("from Alien where tech=?1 order by anme")
+findByXxxSorted(-)
+
+
+ -------------------------------------------
+| SpringBoot Data JPA, MVC H2 Rest example: |
+ -------------------------------------------
+
+Rest Api: 
+	Resouce should be : https://www.website.com/student/101
+	Support json, xml, text......
+	jackson-core----- for json
+	jackson dataformat xml---- need to add for xml converiosn
+	
+1)
+File->New-> Sprin Started Project-> select Spring Web starter, Spring Data JPA, H2 Database
+	* Web
+	* JPA
+	* H2 is inmemory database.
+
+2)
+Create Employee & mark @Entity @Id 
+
+3)
+Configure h2
+	spring.h2.console.enabled=true
+	spring.datasource.platform=h2
+	spring.datasource.url=jdbc:h2:mem:rkdb
+4)
+Create data.sql with insert statements
+
+5)
+Create EmployeeRepo extends CrudRepository<Employee,Integer>
+Create EmployeeController @Controller, @RequestMapping, @Autowired EmployeeRepo 
+*) by default any string return type considered as View name. So, @ResponseBody tell it is resturns some data.
+@PathVariable Integer eid as method param 
+
+
+Update EmployeeRepo extends PagingAndSortingRepository<Employee,Integer>
+PagingAndSortingRepository has more features
+
+6) Get and Update json data? Springboot has jackson-core dependency so it conserts list to json. by default reposnce type is json
+	Change return type
+
+7) Download postman app.
+http://localhost:8080/emp/100
+
+8) Get data in xml format
+[{"key":"Accept","value":"application/xml","description":"","type":"text","enabled":true}]
+
+	Need to add dependency: 
+	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
+<dependency>
+    <groupId>com.fasterxml.jackson.dataformat</groupId>
+    <artifactId>jackson-dataformat-xml</artifactId>
+    <version>2.9.9</version>
+</dependency>
+
+9)
+*) Now rest call can produce both xml and json then how to restrict to specific type of data alone.
+@RequestMapping(path="/emp",produces = {"applications/xml"})
+
+10)
+Post rest to submitteing data
+Put for updating data.
+
+*) Use GetMapping() or PostMapping() instread of @RequestMapping(method="GET")
+*) Use RestController instead of @Controller as no need to specify @ResponseBody for every req method.
+
+i) postman --> Body-->form-data:
+eid		1000
+ename	Ravikiran
+sal 	34000
+
+ii) postman --> Body --> Raw data and Json type
+{
+    "eid": 1000,
+    "ename": "Ravikiran",
+    "sal": 35000
+}
+but need to add @RequestBody in method param
+
+Spring Data Rest: Not required MVC
+===================================
+In the above example Controller excepting request and perfromig operations nothing more.
+
+File->New-> Sprin Started Project-> select Rest Repository , Spring Data JPA, H2 Database
+
+same configuration, pojo 
+
+@RepositoryRestResource(collectionResourceRel ="employees", path="employees")
+public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
+
+}
+
+Thatz it
+postman: http://localhost:8080/employees
+
+we can post, delete , update.... all
+
+	
+
+
+									
+
