@@ -180,7 +180,8 @@ Customizing Spring Boot: by application.properties file
 
 Spring Data JPA: The Data Tier
 
-
+	1) create new spring starter project (course-api-data) with appropriate data and select web, sql(jpa), Apache durby Database,
+	2) 
 		
 	
 				
