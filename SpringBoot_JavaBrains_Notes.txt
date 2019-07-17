@@ -1,0 +1,190 @@
+SpringBoot
+==========
+Can build Production read application
+
+What?
+Why?
+How?
+Features?
+Configurations & Cusromization
+
+
+---------------------------------------------------------------------------------------------------
+Spring:
+	Spring is a application framework to build end to end, enterpise application.
+	
+Problems with Spring:
+	Huge framework
+	Multiple setup steps Ex: connecting to different DBs.
+	Multiple configuration steps
+	Multiplr build & deploy steps.
+	
+	Can we abstract above steps?
+
+
+Spring Boot:
+	It makes easy to create standalone & production ready application spring based application.
+	Progammind & configuration model.
+	Infrastructure support.
+	
+	It is opionated: starting point then add waht u want.
+	Convention over configuration
+	Stand alone
+	Production ready
+
+---------------------------------------------------------------------------------------------------
+
+Setup: 
+	1) Download and install java8 set paths
+	2) Download and install Spring Tool Suite (IDE)
+	3) Maven: Build and Dependency Management tool
+
+---------------------------------------------------------------------------------------------------
+1) Create Maven Project:
+		Spring STS->new ->Maven Project->Create simple project(skip archetype section)
+				com.javabrains.springboot.app1
+				course-api
+2) Add the following in pom.xml: Making our project as child fo spring boot.
+   It contains all default configuration.
+   What version of dependencies should be used.
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.6.RELEASE</version>
+	</parent>
+	
+3) Add web application related dependencies
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>2.1.6.RELEASE</version>
+		</dependency>
+	</dependencies>
+
+4) Check project structure java version is J2SE-1.5
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+5) Create CourseApiApp.java with main method.
+   add @SpringBootApplication  is available in org.springframework.boot.autoconfigure.SpringBootApplication;
+   
+   SpringApplication.run(CourseApiApp.class, args);
+   
+   Run as Java Application
+
+6) check console messages 
+   http://localhost:8080/ gives erros as no mapping/configuration related to app.
+
+
+*) 
+What the method does?
+SpringApplication.run(CourseApiApp.class, args);
+	1) Default configuration
+	2) Starts Spring application context
+	3) Class path scanning
+	4) Start Tomcat server
+
+7) Add controller
+   * java class
+   * marked with annotation: @RestController is available in org.springframework.web.bind.annotation.RestController
+   * what url access
+   * what method to run when url is accessed: @RequestMapping("/hello") by default GET method or @RequestMapping(path = "/hello", method = RequestMethod.GET)
+
+Using SpringMVC: we will create Controller.
+
+@RestController internally having @Controller, @ResponseBody
+
+http://localhost:8080/hello
+
+8) Add TopicController and Topic pojo.
+   TopicController with @RestController and method with @RequestMapping
+   Topic pojo
+   Spring automatically converts into json format and returns.
+
+http://localhost:8080/topics 
+
+
+9) Web server?
+   Embedded Tomcat server is used here.
+   + convenience
+   + servlet container config is now application config
+   + stand alone application
+   + useful for microservice architecture
+   we can use any other server by addng dependency.
+   
+10) Spring MVC Controller & Rest API
+    Resource
+			Topic, Course, Lesson
+	Topics:
+		GET		/topics				Get all topics
+		GET		/topics/{id}		Get the topic 
+		
+		POST	/topics				create new topic 		pass body
+		PUT		/topics/{id}		update the topic		pass body
+		DELETE	/topics/{id}		delete the topic 
+
+11) Create business service by @Service annotation, Spring scans all the java classes and creates instances for all the classes which has @Service.(by default scope is singleton)
+	use @Autowired for accessing instance.(by default autowire by type)
+
+
+12) Check TopicController and TopicService
+	
+	@RequestMapping(path="/topics/{id}", method = RequestMethod.GET)
+	public Topic getTopic(@PathVariable("id") String id)
+	{
+		...
+	}
+	
+	@RequestMapping(value = "/topics", method = RequestMethod.POST)
+	public Topic addTopic(@RequestBody Topic topic)
+	{
+		return null;
+	}
+
+13) Use postman rest client
+	Check curd operation with exception handling.
+   
+---------------------------------------------------------------------------------------------------  
+Booting Spting Boot:
+	Start spring boot app
+		1) Spring Initializer
+		2) Spring boot cli
+		3) STS IDE
+	Configurations
+0) Create maven project and add dependencies manually
+
+1) Spring Initializer
+	goto https://start.spring.io/
+	give all details and select web alone
+	download app then extract and import in STS
+
+2) String boot cli
+
+3) STS
+	IDE based development
+	Right click-> new -> Spring Starter project 
+	Same process
+
+Customizing Spring Boot: by application.properties file
+
+	Create application.properties file in resources folder
+		server.port=8081
+	Ref https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+	
+---------------------------------------------------------------------------------------------------  
+
+Spring Data JPA: The Data Tier
+
+
+		
+	
+				
+	
+
+
+	
