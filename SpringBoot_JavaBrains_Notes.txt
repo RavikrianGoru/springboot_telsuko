@@ -181,11 +181,46 @@ Customizing Spring Boot: by application.properties file
 Spring Data JPA: The Data Tier
 
 	1) create new spring starter project (course-api-data) with appropriate data and select web, sql(jpa), Apache durby Database,
-	2) 
-		
+	2) Copy the topic and hello files from old project the remove old project.
+	3) Make Topic.java as table by using @Entity and @Id annotations
+	4) Create Topic Repository interface extends CrudRepository or PagingAndSortingRepository
+	   public interface TopicRepository extends CrudRepository<Topic, String>
+	5) copy paste topic package and update in new package as Topics to Course update all files.
+	6) Course can have topic onject reference @OneToMany
+	
+	http://localhost:8080/topics
+	http://localhost:8080/topics/j1/courses/jstream1
+	http://localhost:8080/topics/j1/courses/
+
+
+---------------------------------------------------------------------------------------------------	
+Spring Boot Deployemnt:
+
+open gitbash
+	go to project: mvn clean install
+	java -jar target/jarName.jar
+
+--------------------------------------------------------------------------------------------------
+
+Ops
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+    <version>2.1.6.RELEASE</version>
+</dependency>
+
+
+	http://localhost:8080/actuator
+	
 	
 				
 	
 
 
 	
+=================================================================================================
+
+
+					
+
